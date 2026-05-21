@@ -1,1 +1,1 @@
-# ComponentFramework26.157.0
+# STG Pratice
