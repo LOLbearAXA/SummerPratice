@@ -1,65 +1,16 @@
-Fri Feb 27 12:49:08 2026
+Sun May 31 19:31:29 2026
 [INFO]: Starting the SceneManager
-[INFO]: OpenGL version: 4.6.0 NVIDIA 572.70
+[INFO]: OpenGL version: 4.6.0 NVIDIA 596.21
 [INFO]: Graphics card vendor NVIDIA Corporation
 [INFO]: Graphics card name NVIDIA GeForce RTX 3070 Laptop GPU/PCIe/SSE2
 [INFO]: GLSL Version 4.60 NVIDIA
 [INFO]: Created Scene0: 
-[INFO]: Loading assets Scene0: 
-[INFO]: Uniforms:
-"lightPos" loc:0
-"modelMatrix" loc:1
-"projectionMatrix" loc:2
-"someTexture" loc:3
-"viewMatrix" loc:4
-
-[INFO]: Deleting assets Scene0: 
-[INFO]: Deleted Scene0: 
-[INFO]: Created Scene0: 
-[INFO]: Loading assets Scene0: 
+[INFO]: Loading assets SceneSTG: 
 [INFO]: Uniforms:
 "modelMatrix" loc:2
 "projectionMatrix" loc:0
 "viewMatrix" loc:1
 
-[INFO]: Deleting assets Scene0g: 
-[INFO]: Deleted Scene0: 
-[INFO]: Created Scene0: 
-[INFO]: Loading assets Scene0: 
-[INFO]: Uniforms:
-"lightPos" loc:0
-"modelMatrix" loc:1
-"projectionMatrix" loc:2
-"someTexture" loc:3
-"viewMatrix" loc:4
-
-[INFO]: Deleting assets Scene0g: 
-[INFO]: Deleted Scene0: 
-[INFO]: Created Scene0: 
-[INFO]: Loading assets Scene0: 
-[INFO]: Uniforms:
-"brightness[0]" loc:0
-"diffuseLight[0]" loc:10
-"lightPos[0]" loc:20
-"modelMatrix" loc:30
-"numberOfDiffuseLight" loc:31
-"numberOfLight" loc:32
-"projectionMatrix" loc:33
-"spectularLight[0]" loc:34
-"viewMatrix" loc:44
-
-[WARNING]: numberOfSpectularLight :No such uniform name in file: D:\HUMBER_FILE\HUMBER_GAME_157\ComponentFramework26.157.0\ComponentFramework26.157.0\ComponentFramework\Shader.cpp on line: 247
-[INFO]: Deleting assets Scene0g: 
-[INFO]: Deleted Scene0: 
-[INFO]: Created Scene0: 
-[INFO]: Loading assets Scene0: 
-[INFO]: Uniforms:
-"lightPos" loc:0
-"modelMatrix" loc:1
-"projectionMatrix" loc:2
-"someTexture" loc:3
-"viewMatrix" loc:4
-
 [INFO]: Deleting the SceneManager
-[INFO]: Deleting assets Scene0g: 
+[INFO]: Deleting assets Scene0: 
 [INFO]: Deleted Scene0: 

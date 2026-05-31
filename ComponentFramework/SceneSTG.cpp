@@ -11,7 +11,7 @@
 #include "Texture.h"
 #include <QMath.h>
 
-SceneSTG::SceneSTG() :sphere{ nullptr }, shader{ nullptr }, mesh{ nullptr },
+SceneSTG::SceneSTG() :sphere{ nullptr }, shader{ nullptr }, mesh{ nullptr }, audioPlayer{ nullptr },
 drawInWireMode{ false } {
 	Debug::Info("Created Scene0: ", __FILE__, __LINE__);
 }
@@ -23,6 +23,17 @@ SceneSTG::~SceneSTG() {
 bool SceneSTG::OnCreate() {
 	Debug::Info("Loading assets SceneSTG: ", __FILE__, __LINE__);
 
+	sphere = new Body();
+	sphere->OnCreate();
+
+	shader = new Shader("shaders/defaultVert.glsl", "shaders/defaultFrag.glsl");
+	if (shader->OnCreate() == false) {
+		std::cout << "Shader failed ... we have a problem\n";
+	}
+
+	mesh = new Mesh("meshes/Sphere.obj");
+	mesh->OnCreate();
+	
 	return true;
 }
 
@@ -31,29 +42,12 @@ void SceneSTG::OnDestroy() {
 	sphere->OnDestroy();
 	delete sphere;
 
-	sphere2->OnDestroy();
-	delete sphere2;
-
-	plane1->OnDestroy();
-	delete plane1;
-
 	mesh->OnDestroy();
 	delete mesh;
-
-	planeMesh->OnDestroy();
-	delete planeMesh;
-
-	skullMesh->OnDestroy();
-	delete skullMesh;
 
 	shader->OnDestroy();
 	delete shader;
 
-	delete earthTexture;
-
-	delete moonTexture;
-
-	delete marioTexture;
 }
 
 void SceneSTG::HandleEvents(const SDL_Event& sdlEvent) {
@@ -93,8 +87,6 @@ void SceneSTG::Render() const {
 	glUseProgram(shader->GetProgram()); // turn on shader
 	glUniformMatrix4fv(shader->GetUniformID("projectionMatrix"), 1, GL_FALSE, projectionMatrix);
 	glUniformMatrix4fv(shader->GetUniformID("viewMatrix"), 1, GL_FALSE, viewMatrix);
-	glUniform3fv(shader->GetUniformID("lightPos"), 1, lightPos);
 
-	glBindTexture(GL_TEXTURE_2D, 0); // UNDIND TEXTURE (Don't need to unbind everytime)
 	glUseProgram(0); // TURN OFF THE SHADER
 }

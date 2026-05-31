@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Vector.h"
 #include <Matrix.h>
+#include "Sound.h"
 
 using namespace MATH;
 
@@ -16,18 +17,16 @@ class Texture;
 class SceneSTG : public Scene {
 private:
 	Body* sphere;
-	Body* sphere2;
-	Body* plane1;
 	Shader* shader;
-	Mesh* mesh, * planeMesh;
-	Mesh* skullMesh;
-	Texture* earthTexture, * moonTexture, * marioTexture;
+	Mesh* mesh;
 	Matrix4 projectionMatrix;
 	Matrix4 viewMatrix;
 	Matrix4 earthModelMatrix, moonModelMatrix, marioModelMatrix;
 	bool drawInWireMode;
 
 	Vec3 lightPos;
+
+	Sound* audioTest;
 
 public:
 	explicit SceneSTG();

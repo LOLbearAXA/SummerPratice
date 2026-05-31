@@ -12,6 +12,11 @@ bool Window::OnCreate(std::string name_, int width_, int height_) {
 		return false;
 	}
 	
+	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+		Debug::FatalError("Failed to initialize SDL", __FILE__, __LINE__);
+		return false;
+	}
+
 	this->width = width_;
 	this->height = height_;
 	window = SDL_CreateWindow(name_.c_str(),width, height,SDL_WINDOW_OPENGL);
