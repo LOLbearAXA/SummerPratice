@@ -145,6 +145,7 @@
     <ClCompile Include="Scene0g.cpp" />
     <ClCompile Include="SceneSTG.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Trackball.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Scene0g.h" />
     <ClInclude Include="SceneSTG.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="tiny_obj_loader.h" />
