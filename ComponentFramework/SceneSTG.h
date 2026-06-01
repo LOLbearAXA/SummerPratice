@@ -26,6 +26,7 @@ private:
 
 	Vec3 lightPos;
 
+	SDL_AudioStream* audioPlayer;
 	Sound* audioTest;
 
 public:

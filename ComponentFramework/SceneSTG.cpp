@@ -34,6 +34,34 @@ bool SceneSTG::OnCreate() {
 	mesh = new Mesh("meshes/Sphere.obj");
 	mesh->OnCreate();
 	
+	SDL_AudioSpec defaultSpec;
+	defaultSpec.freq = 48000;
+	defaultSpec.channels = 2;
+	defaultSpec.format = SDL_AUDIO_S16;
+
+	audioPlayer = SDL_OpenAudioDeviceStream(
+		SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,
+		&defaultSpec,
+		nullptr,
+		nullptr
+	);
+
+	if (!audioPlayer) {
+		std::cout << "Failed to create audio player\n";
+	}
+
+
+	SDL_ResumeAudioStreamDevice(audioPlayer);
+
+	audioTest = new Sound("audio/Sabbat.wav");
+	audioTest->OnCreate();
+
+	audioTest->Play(audioPlayer);
+
+	int queued = SDL_GetAudioStreamQueued(audioPlayer);
+
+	SDL_Log("Queued bytes: %d", queued);
+
 	return true;
 }
 
@@ -48,6 +76,11 @@ void SceneSTG::OnDestroy() {
 	shader->OnDestroy();
 	delete shader;
 
+	// destroy audio player
+	SDL_DestroyAudioStream(audioPlayer);
+
+	audioTest->OnDestroy();
+	delete audioTest;
 }
 
 void SceneSTG::HandleEvents(const SDL_Event& sdlEvent) {

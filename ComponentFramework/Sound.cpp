@@ -1,8 +1,10 @@
 #include "Sound.h"
 
-Sound::Sound(const char* filename_) : waveBuffer{nullptr}, waveLength{0} {
+Sound::Sound(const char* filename_) : soundBuffer{nullptr}, soundLength{0} {
 	filename = filename_;
 }
+
+Sound::~Sound() { /* free memory */ };
 
 bool Sound::OnCreate() {
 	loadSound(filename);
@@ -10,12 +12,24 @@ bool Sound::OnCreate() {
 }
 
 void Sound::OnDestroy() {
-	SDL_free(waveBuffer);
+	SDL_free(soundBuffer);
 }
 
 void Sound::loadSound(const char* filename_) {
 
-	if (!SDL_LoadWAV(filename_, &spec, &waveBuffer, &waveLength)) {
+	if (!SDL_LoadWAV(filename_, &spec, &soundBuffer, &soundLength)) {
 		throw std::runtime_error("Fail to load sound");
+	}
+
+	SDL_Log("Freq: %d", spec.freq);
+	SDL_Log("Channels: %d", spec.channels);
+	SDL_Log("Format: %u", spec.format);
+
+}
+
+void Sound::Play(SDL_AudioStream* audioPlayer) {
+	if (!SDL_PutAudioStreamData(audioPlayer, soundBuffer, soundLength))
+	{
+		std::cout << "Fail to play sound\n";
 	}
 }
