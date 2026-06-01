@@ -6,8 +6,8 @@
 class Sound {
 private:
 	SDL_AudioSpec spec;
-	Uint8* waveBuffer;
-	Uint32 waveLength;
+	Uint8* soundBuffer;
+	Uint32 soundLength;
 
 	const char* filename;
 
