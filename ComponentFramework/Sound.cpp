@@ -18,7 +18,7 @@ void Sound::OnDestroy() {
 void Sound::loadSound(const char* filename_) {
 
 	if (!SDL_LoadWAV(filename_, &spec, &soundBuffer, &soundLength)) {
-		throw std::runtime_error("Fail to load sound");
+		std::cout << ("Fail to load sound");
 	}
 
 	SDL_Log("Freq: %d", spec.freq);
