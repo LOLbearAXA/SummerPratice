@@ -1,9 +1,9 @@
-Sun May 31 21:17:54 2026
+Mon Jun  1 18:01:04 2026
 [INFO]: Starting the SceneManager
-[INFO]: OpenGL version: 4.6.0 NVIDIA 596.21
-[INFO]: Graphics card vendor NVIDIA Corporation
-[INFO]: Graphics card name NVIDIA GeForce RTX 3070 Laptop GPU/PCIe/SSE2
-[INFO]: GLSL Version 4.60 NVIDIA
+[INFO]: OpenGL version: 4.6.0 - Build 32.0.101.7085
+[INFO]: Graphics card vendor Intel
+[INFO]: Graphics card name Intel(R) UHD Graphics
+[INFO]: GLSL Version 4.60 - Build 32.0.101.7085
 [INFO]: Created Scene0: 
 [INFO]: Loading assets SceneSTG: 
 [INFO]: Uniforms:
@@ -11,6 +11,3 @@ Sun May 31 21:17:54 2026
 "projectionMatrix" loc:0
 "viewMatrix" loc:1
 
-[INFO]: Deleting the SceneManager
-[INFO]: Deleting assets Scene0: 
-[INFO]: Deleted Scene0: 
