@@ -50,7 +50,6 @@ bool SceneSTG::OnCreate() {
 		std::cout << "Failed to create audio player\n";
 	}
 
-
 	SDL_ResumeAudioStreamDevice(audioPlayer);
 
 	audioTest = new Sound("audio/Sabbat.wav");
