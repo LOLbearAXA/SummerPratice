@@ -31,8 +31,8 @@ bool SceneSTG::OnCreate() {
 		std::cout << "Shader failed ... we have a problem\n";
 	}
 
-	mesh = new Mesh("meshes/Sphere.obj");
-	mesh->OnCreate();
+	//mesh = new Mesh("meshes/Sphere.obj");
+	//mesh->OnCreate();
 	
 	SDL_AudioSpec defaultSpec;
 	defaultSpec.freq = 48000;
@@ -69,8 +69,8 @@ void SceneSTG::OnDestroy() {
 	sphere->OnDestroy();
 	delete sphere;
 
-	mesh->OnDestroy();
-	delete mesh;
+	//mesh->OnDestroy();
+	//delete mesh;
 
 	shader->OnDestroy();
 	delete shader;
