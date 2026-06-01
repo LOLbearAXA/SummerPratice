@@ -2,12 +2,6 @@
 #include "SceneManager.h"
 #include "Timer.h"
 #include "Window.h"
-#include "Scene0g.h"
-#include "Scene0p.h"
-#include "Scene1p.h"
-#include "Scene1g.h"
-#include "Scene2g.h"
-#include "Scene3g.h"
 #include "SceneSTG.h"
 
 SceneManager::SceneManager(): 
@@ -89,25 +83,7 @@ void SceneManager::HandleEvents() {
 
 			case SDL_SCANCODE_F1:
 				// switch to scene0 default
-				BuildNewScene(SCENE_NUMBER::SCENE0g);
-				break;
-
-			case SDL_SCANCODE_F2:
-				// switch to scene1 physics
-				BuildNewScene(SCENE_NUMBER::SCENE1p);
-				break;
-
-			case SDL_SCANCODE_F3:
-				// switch to scene1 physics
-				BuildNewScene(SCENE_NUMBER::SCENE1g);
-				break;
-
-			case SDL_SCANCODE_F4:
-				BuildNewScene(SCENE_NUMBER::SCENE2g);
-				break;
-
-			case SDL_SCANCODE_F5:
-				BuildNewScene(SCENE_NUMBER::SCENE3g);
+				BuildNewScene(SCENE_NUMBER::SCENESTG);
 				break;
 
 			case SDL_SCANCODE_F6:
@@ -136,35 +112,6 @@ bool SceneManager::BuildNewScene(SCENE_NUMBER scene) {
 
 	switch (scene) {
 	// default scenes
-	case SCENE_NUMBER::SCENE0g:
-		currentScene = new Scene0g();
-		status = currentScene->OnCreate();
-		break;
-	case SCENE_NUMBER::SCENE0p:
-		currentScene = new Scene0p();
-		status = currentScene->OnCreate();
-		break;
-
-	case SCENE_NUMBER::SCENE1p: // physic assignment 1
-		currentScene = new Scene1p();
-		status = currentScene->OnCreate();
-		break;
-
-	case SCENE_NUMBER::SCENE1g:
-		currentScene = new Scene1g();
-		status = currentScene->OnCreate();
-		break;
-
-	case SCENE_NUMBER::SCENE2g:
-		currentScene = new Scene2g();
-		status = currentScene->OnCreate();
-		break;
-
-	case SCENE_NUMBER::SCENE3g:
-		currentScene = new Scene3g();
-		status = currentScene->OnCreate();
-		break;
-
 	case SCENE_NUMBER::SCENESTG:
 		currentScene = new SceneSTG();
 		status = currentScene->OnCreate();
@@ -175,6 +122,7 @@ bool SceneManager::BuildNewScene(SCENE_NUMBER scene) {
 		currentScene = nullptr;
 		return false;
 	}
+
 	return true;
 }
 
