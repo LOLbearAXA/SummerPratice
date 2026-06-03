@@ -14,8 +14,23 @@ public:
 	void playSoundAt(const Sound* sound, const int pipe);
 	void playSoundAt(const Sound* sound); // automaticlly select a pipe that no sound is played
 
+	void setBackgroundMusic(const char* filename);
+
+	// volume adjustment
+	// 0.0f - 1.0f
+	// 0.0f = 0%
+	// 1.0f = 100%
+	// 0.5f = 50%
+	void adjustBackgroundMusicVolume(const float value);
+	void adjustMasterVolume(const float value);
+
+	void switchBackgroundMusic(const char* filename);
+
+	void UpdateBGM(); // use on scene update
+
 private:
-	std::vector<SDL_AudioStream*> audioStreamList;
+	std::vector<SDL_AudioStream*> SFXStreamList;
+	SDL_AudioStream* BGMStream; // for background music
 	SDL_AudioDeviceID mainDevice;
 
 	enum class SOUND_PIPE {
@@ -39,4 +54,6 @@ private:
 		2, // channel
 		48000 // frequency
 	};
+
+	Sound* BGM;
 };
