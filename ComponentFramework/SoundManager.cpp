@@ -1,6 +1,6 @@
 #include "SoundManager.h"
 
-SoundManager::SoundManager() : BGM(nullptr) {
+SoundManager::SoundManager() : BGM(nullptr), BGMStream(nullptr) {
 	mainDevice = SDL_OpenAudioDevice(
 		SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,
 		&defaultSpec
