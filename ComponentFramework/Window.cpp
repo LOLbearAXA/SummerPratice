@@ -1,5 +1,22 @@
 #include "Window.h"
 #include "Debug.h"
+
+
+
+
+
+
+#include "imgui.h"
+#include "imgui_impl_sdl3.h"
+#include "imgui_impl_opengl3.h"
+
+
+
+
+
+
+
+
 Window::Window(): window{nullptr}, context{nullptr},  width{0}, height{0} {}
 
 Window::~Window() {
