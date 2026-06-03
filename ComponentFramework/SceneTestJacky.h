@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "Vector.h"
 #include <Matrix.h>
-#include "Sound.h"
+#include "SoundManager.h"
 
 using namespace MATH;
 
@@ -27,9 +27,10 @@ private:
 
 	Vec3 lightPos;
 
-	SDL_AudioStream* audioPlayer;
-
 	Camera* camera;
+
+	SoundManager* soundManager;
+	Sound* sound1, *sound2;
 
 public:
 	explicit SceneJA();

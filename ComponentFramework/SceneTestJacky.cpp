@@ -12,7 +12,7 @@
 #include <QMath.h>
 #include "Camera.h"
 
-SceneJA::SceneJA() :testOBJ{ nullptr }, shader{ nullptr }, mesh{ nullptr }, audioPlayer{ nullptr },
+SceneJA::SceneJA() :testOBJ{ nullptr }, shader{ nullptr }, mesh{ nullptr }, soundManager(nullptr),
 drawInWireMode{ false } {
 	Debug::Info("Created SceneJA: ", __FILE__, __LINE__);
 }
@@ -37,6 +37,12 @@ bool SceneJA::OnCreate() {
 	camera = new Camera();
 	camera->OnCreate();
 
+	soundManager = new SoundManager();
+	soundManager->OnCreate();
+
+	sound2 = new Sound("audio/273711__sfx4animation__whoosh-sfx-40.wav");
+	sound2->OnCreate();
+
 	return true;
 }
 
@@ -56,6 +62,21 @@ void SceneJA::OnDestroy() {
 		camera->OnDestroy();
 		delete camera;
 	}
+
+	if (soundManager) {
+		soundManager->OnDestroy();
+		delete soundManager;
+	}
+
+	if (sound1) {
+		sound1->OnDestroy();
+		delete sound1;
+	}
+
+	if (sound2) {
+		sound2->OnDestroy();
+		delete sound2;
+	}
 }
 
 void SceneJA::HandleEvents(const SDL_Event& sdlEvent) {
@@ -64,6 +85,12 @@ void SceneJA::HandleEvents(const SDL_Event& sdlEvent) {
 		switch (sdlEvent.key.scancode) {
 		case SDL_SCANCODE_W:
 			drawInWireMode = !drawInWireMode;
+			break;
+		case SDL_SCANCODE_F:
+			soundManager->playSoundAt(sound2, 0);
+			break;
+		case SDL_SCANCODE_G:
+			soundManager->playSoundAt(sound2, 1);
 			break;
 		default:
 			break;

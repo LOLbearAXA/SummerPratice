@@ -21,5 +21,5 @@ public:
 	bool OnCreate();
 	void OnDestroy();
 
-	void Play(SDL_AudioStream* audioPlayer);
+	void Play(SDL_AudioStream* audioPlayer) const;
 };
