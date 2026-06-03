@@ -4,7 +4,7 @@
 #include "Window.h"
 #include "SceneSTG.h"
 #include "SceneTestJacky.h"
-
+#include "SceneMuntasir.h"
 
 
 
@@ -129,6 +129,11 @@ void SceneManager::HandleEvents() {
 				BuildNewScene(SCENE_NUMBER::SCENEJA);
 				break;
 
+			case SDL_SCANCODE_F3:
+				// switch to scene0 default
+				BuildNewScene(SCENE_NUMBER::SCENEMUN);
+				break;
+
 			case SDL_SCANCODE_F6:
 				break;
 			default:
@@ -162,6 +167,11 @@ bool SceneManager::BuildNewScene(SCENE_NUMBER scene) {
 
 	case SCENE_NUMBER::SCENEJA:
 		currentScene = new SceneJA();
+		status = currentScene->OnCreate();
+		break;
+
+	case SCENE_NUMBER::SCENEMUN:
+		currentScene = new SceneMuntasir();
 		status = currentScene->OnCreate();
 		break;
 
