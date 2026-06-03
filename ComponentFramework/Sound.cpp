@@ -27,7 +27,7 @@ void Sound::loadSound(const char* filename_) {
 
 }
 
-void Sound::Play(SDL_AudioStream* audioPlayer) {
+void Sound::Play(SDL_AudioStream* audioPlayer) const {
 	if (!SDL_PutAudioStreamData(audioPlayer, soundBuffer, soundLength))
 	{
 		std::cout << "Fail to play sound\n";

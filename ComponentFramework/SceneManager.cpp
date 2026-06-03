@@ -3,6 +3,7 @@
 #include "Timer.h"
 #include "Window.h"
 #include "SceneSTG.h"
+#include "SceneTestJacky.h"
 
 
 
@@ -68,7 +69,7 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 
 
 	/********************************   Default first scene   ***********************/
-	BuildNewScene(SCENE_NUMBER::SCENESTG);
+	BuildNewScene(SCENE_NUMBER::SCENEJA);
 	/********************************************************************************/
 	return true;
 }
@@ -123,6 +124,11 @@ void SceneManager::HandleEvents() {
 				BuildNewScene(SCENE_NUMBER::SCENESTG);
 				break;
 
+			case SDL_SCANCODE_F2:
+				// switch to scene0 default
+				BuildNewScene(SCENE_NUMBER::SCENEJA);
+				break;
+
 			case SDL_SCANCODE_F6:
 				break;
 			default:
@@ -151,6 +157,11 @@ bool SceneManager::BuildNewScene(SCENE_NUMBER scene) {
 	// default scenes
 	case SCENE_NUMBER::SCENESTG:
 		currentScene = new SceneSTG();
+		status = currentScene->OnCreate();
+		break;
+
+	case SCENE_NUMBER::SCENEJA:
+		currentScene = new SceneJA();
 		status = currentScene->OnCreate();
 		break;
 

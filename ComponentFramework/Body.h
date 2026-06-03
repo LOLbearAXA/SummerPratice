@@ -8,6 +8,7 @@ using namespace MATH;
 /// Used later in the course
 class Mesh;
 class Texture;
+class Shader;
 
 class Body {
 public:
@@ -35,14 +36,17 @@ private:
 	// Graphics stuff 
 	Mesh *mesh;
 	Texture *texture;
+
 public:
 	bool OnCreate();
 	void OnDestroy();
 	void Update(float deltaTime);
-	void Render() const;
+	void Render(Shader *shader) const;
 	void ApplyForce(Vec3 force);
 	void setAccel(const Vec3 &accel_) { accel = accel_;}
 	void setVel(const Vec3& vel_) { vel = vel_; }
+
+	void setMesh(const char* filename);
 };
 
 #endif
