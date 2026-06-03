@@ -27,3 +27,19 @@ void SoundManager::playSoundAt(const Sound* sound, const int pipe) {
 	SDL_ClearAudioStream(audioStreamList[pipe]);
 	sound->Play(audioStreamList[pipe]);
 }
+
+void SoundManager::playSoundAt(const Sound* sound) {
+	bool foundPipe = false;
+	for (SDL_AudioStream* audioPipe : audioStreamList) {
+		if (SDL_GetAudioStreamQueued(audioPipe) == 0) {
+			sound->Play(audioPipe);
+			foundPipe = true;
+			break;
+		}
+	}
+
+	if (!foundPipe) { // if all pipes are in queued, play the sound at the first pipe
+		SDL_ClearAudioStream(audioStreamList[0]);
+		sound->Play(audioStreamList[0]); 
+	}
+}

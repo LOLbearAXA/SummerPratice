@@ -87,7 +87,7 @@ void SceneJA::HandleEvents(const SDL_Event& sdlEvent) {
 			drawInWireMode = !drawInWireMode;
 			break;
 		case SDL_SCANCODE_F:
-			soundManager->playSoundAt(sound2, 0);
+			soundManager->playSoundAt(sound2);
 			break;
 		case SDL_SCANCODE_G:
 			soundManager->playSoundAt(sound2, 1);
