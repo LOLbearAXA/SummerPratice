@@ -23,6 +23,7 @@ public:
 	// 0.5f = 50%
 	void adjustBackgroundMusicVolume(const float value);
 	void adjustMasterVolume(const float value);
+	void adjustSFXVolume(const float value);
 
 	void switchBackgroundMusic(const char* filename);
 
