@@ -1,4 +1,4 @@
-Wed Jun  3 18:26:29 2026
+Wed Jun  3 18:28:05 2026
 [INFO]: Starting the SceneManager
 [INFO]: OpenGL version: 4.6.0 NVIDIA 591.86
 [INFO]: Graphics card vendor NVIDIA Corporation
@@ -22,13 +22,13 @@ Wed Jun  3 18:26:29 2026
 
 [INFO]: Deleting assets SceneMuntasir: 
 [INFO]: Deleted SceneMuntasir: 
-[INFO]: Created SceneMuntasir: 
-[INFO]: Loading assets SceneMuntasir: 
+[INFO]: Created SceneJA: 
+[INFO]: Loading assets SceneJA: 
 [INFO]: Uniforms:
 "modelMatrix" loc:2
 "projectionMatrix" loc:0
 "viewMatrix" loc:1
 
 [INFO]: Deleting the SceneManager
-[INFO]: Deleting assets SceneMuntasir: 
-[INFO]: Deleted SceneMuntasir: 
+[INFO]: Deleting assets SceneJA: 
+[INFO]: Deleted SceneJA: 
