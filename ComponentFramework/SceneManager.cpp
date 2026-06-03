@@ -4,6 +4,20 @@
 #include "Window.h"
 #include "SceneSTG.h"
 
+
+
+
+// ImGui
+#include "imgui.h"
+#include "imgui_impl_sdl3.h"
+#include "imgui_impl_opengl3.h"
+
+
+
+
+
+
+
 SceneManager::SceneManager(): 
 	currentScene{nullptr}, window{nullptr}, timer{nullptr},
 	fps(60), isRunning{false}, fullScreen{false} {
@@ -45,6 +59,14 @@ bool SceneManager::Initialize(std::string name_, int width_, int height_) {
 		return false;
 	}
 
+	/// imgui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+	ImGui_ImplSDL3_InitForOpenGL(window->getWindow(), SDL_GL_GetCurrentContext());
+	ImGui_ImplOpenGL3_Init("#version 450");
+
+
 	/********************************   Default first scene   ***********************/
 	BuildNewScene(SCENE_NUMBER::SCENESTG);
 	/********************************************************************************/
@@ -58,8 +80,23 @@ void SceneManager::Run() {
 	while (isRunning) {
 		HandleEvents();
 		timer->UpdateFrameTicks();
+
+
+
+		// Start ImGui frame
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplSDL3_NewFrame();
+		ImGui::NewFrame();
+
+
 		currentScene->Update(timer->GetDeltaTime());
 		currentScene->Render();
+
+		currentScene->DrawGui();
+
+		// Render ImGui
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		
 		SDL_GL_SwapWindow(window->getWindow());
 		SDL_Delay(timer->GetSleepTime(fps));

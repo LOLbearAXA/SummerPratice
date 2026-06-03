@@ -11,6 +11,10 @@
 #include "Texture.h"
 #include <QMath.h>
 
+
+// imgui
+#include "imgui.h"
+
 SceneSTG::SceneSTG() :sphere{ nullptr }, shader{ nullptr }, mesh{ nullptr }, audioPlayer{ nullptr },
 drawInWireMode{ false } {
 	Debug::Info("Created Scene0: ", __FILE__, __LINE__);
@@ -121,4 +125,43 @@ void SceneSTG::Render() const {
 	glUniformMatrix4fv(shader->GetUniformID("viewMatrix"), 1, GL_FALSE, viewMatrix);
 
 	glUseProgram(0); // TURN OFF THE SHADER
+}
+
+
+
+
+
+/// imgui
+void SceneSTG::DrawGui() {
+	// Optional tiny debug window
+	ImGui::Begin("Scene3p Debug");
+	ImColor textColor(255, 255, 255);
+	ImGui::Text("Yay, ImGui is working!");
+	ImGui::End();
+
+	ImGuiIO& io = ImGui::GetIO();
+	ImDrawList* drawList = ImGui::GetForegroundDrawList();
+
+	// Center of screen
+	ImVec2 center(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
+
+	// Crosshair settings
+	float crosshairSize = 20.0f;
+	float crosshairThickness = 5.0f;
+
+	// Horizontal line
+	drawList->AddLine(
+		ImVec2(center.x - crosshairSize, center.y),
+		ImVec2(center.x + crosshairSize, center.y),
+		IM_COL32(255, 255, 255, 255),
+		crosshairThickness
+	);
+
+	// Vertical line
+	drawList->AddLine(
+		ImVec2(center.x, center.y - crosshairSize),
+		ImVec2(center.x, center.y + crosshairSize),
+		IM_COL32(255, 255, 255, 255),
+		crosshairThickness
+	);
 }

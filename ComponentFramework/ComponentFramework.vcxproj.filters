@@ -75,6 +75,27 @@
     <ClCompile Include="Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_opengl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_sdl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h">
@@ -113,6 +134,33 @@
     <ClInclude Include="Sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_opengl3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_opengl3_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_sdl3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="GameEngineLog.txt">
@@ -126,23 +174,8 @@
     <None Include="shaders\defaultVert.glsl">
       <Filter>Resource Files\Default</Filter>
     </None>
-    <None Include="shaders\texturePhongVert.glsl">
-      <Filter>Resource Files\ClassMade</Filter>
-    </None>
-    <None Include="shaders\phongVert.glsl">
-      <Filter>Resource Files\ClassMade</Filter>
-    </None>
-    <None Include="shaders\texturePhongFrag.glsl">
-      <Filter>Resource Files\ClassMade</Filter>
-    </None>
-    <None Include="shaders\phongFrag.glsl">
-      <Filter>Resource Files\ClassMade</Filter>
-    </None>
-    <None Include="shaders\multiPhongFrag.glsl">
-      <Filter>Resource Files\Assignment</Filter>
-    </None>
-    <None Include="shaders\multiPhongVert.glsl">
-      <Filter>Resource Files\Assignment</Filter>
+    <None Include="imgui.ini">
+      <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
 </Project>

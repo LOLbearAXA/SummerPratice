@@ -11,5 +11,8 @@ public:
 	virtual void Render() const  = 0 ;
 	virtual void HandleEvents(const SDL_Event &sdlEvent) = 0;
 	
+
+	// ImGui
+	virtual void DrawGui() {}
 };
 #endif
