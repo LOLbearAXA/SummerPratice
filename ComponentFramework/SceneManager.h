@@ -16,6 +16,7 @@ private:
 	enum class SCENE_NUMBER {
 		SCENE0g = 0,
 		SCENEJA,
+		SCENEMUN,
 		SCENESTG
 	};
 

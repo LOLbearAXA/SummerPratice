@@ -43,6 +43,8 @@ bool SceneJA::OnCreate() {
 	sound2 = new Sound("audio/273711__sfx4animation__whoosh-sfx-40.wav");
 	sound2->OnCreate();
 
+	soundManager->adjustSFXVolume(0.3f);
+
 	return true;
 }
 
@@ -90,7 +92,7 @@ void SceneJA::HandleEvents(const SDL_Event& sdlEvent) {
 			soundManager->playSoundAt(sound2);
 			break;
 		case SDL_SCANCODE_G:
-			soundManager->playSoundAt(sound2, 1);
+			soundManager->adjustMasterVolume(0.6f);
 			break;
 		default:
 			break;

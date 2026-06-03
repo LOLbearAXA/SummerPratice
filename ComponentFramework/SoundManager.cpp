@@ -1,6 +1,6 @@
 #include "SoundManager.h"
 
-SoundManager::SoundManager() {
+SoundManager::SoundManager() : BGM(nullptr), BGMStream(nullptr) {
 	mainDevice = SDL_OpenAudioDevice(
 		SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,
 		&defaultSpec
@@ -79,7 +79,9 @@ void SoundManager::switchBackgroundMusic(const char* filename) {
 }
 
 void SoundManager::UpdateBGM() {
-	BGM->Play(BGMStream);
+	if (BGM) {
+		BGM->Play(BGMStream);
+	}
 }
 
 void SoundManager::adjustBackgroundMusicVolume(const float value) {
@@ -88,4 +90,10 @@ void SoundManager::adjustBackgroundMusicVolume(const float value) {
 
 void SoundManager::adjustMasterVolume(const float value) {
 	SDL_SetAudioDeviceGain(mainDevice, value);
+}
+
+void SoundManager::adjustSFXVolume(const float value) {
+	for (SDL_AudioStream* audioPipe : SFXStreamList) {
+		SDL_SetAudioStreamGain(audioPipe, value);
+	}
 }
