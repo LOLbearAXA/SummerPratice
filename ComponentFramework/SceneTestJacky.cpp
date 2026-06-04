@@ -41,9 +41,13 @@ bool SceneJA::OnCreate() {
 	soundManager->OnCreate();
 
 	sound2 = new Sound("audio/273711__sfx4animation__whoosh-sfx-40.wav");
-	sound2->OnCreate();
+	sound2->OnCreate(soundManager->getMixer());
 
-	soundManager->adjustSFXVolume(0.3f);
+	sound1 = new Sound("audio/Sabbat.wav");
+	sound1->OnCreate(soundManager->getMixer());
+
+	soundManager->adjustMasterVolume(0.1f);
+	//soundManager->PlayBGM(sound1);
 
 	return true;
 }
@@ -65,11 +69,6 @@ void SceneJA::OnDestroy() {
 		delete camera;
 	}
 
-	if (soundManager) {
-		soundManager->OnDestroy();
-		delete soundManager;
-	}
-
 	if (sound1) {
 		sound1->OnDestroy();
 		delete sound1;
@@ -78,6 +77,11 @@ void SceneJA::OnDestroy() {
 	if (sound2) {
 		sound2->OnDestroy();
 		delete sound2;
+	}
+
+	if (soundManager) {
+		soundManager->OnDestroy();
+		delete soundManager;
 	}
 }
 
@@ -89,10 +93,10 @@ void SceneJA::HandleEvents(const SDL_Event& sdlEvent) {
 			drawInWireMode = !drawInWireMode;
 			break;
 		case SDL_SCANCODE_F:
-			soundManager->playSoundAt(sound2);
+			soundManager->PlaySFX(sound2);
 			break;
 		case SDL_SCANCODE_G:
-			soundManager->adjustMasterVolume(0.6f);
+			soundManager->adjustMasterVolume(0.2f);
 			break;
 		default:
 			break;

@@ -4,6 +4,8 @@
 #include <string>
 
 class SoundManager {
+friend Sound;
+
 public:
 	SoundManager();
 	~SoundManager();
@@ -11,10 +13,7 @@ public:
 	bool OnCreate();
 	void OnDestroy();
 
-	void playSoundAt(const Sound* sound, const int pipe);
-	void playSoundAt(const Sound* sound); // automaticlly select a pipe that no sound is played
-
-	void setBackgroundMusic(const char* filename);
+	MIX_Mixer* getMixer() const { return audioMixer; }
 
 	// volume adjustment
 	// 0.0f - 1.0f
@@ -25,36 +24,34 @@ public:
 	void adjustMasterVolume(const float value);
 	void adjustSFXVolume(const float value);
 
-	void switchBackgroundMusic(const char* filename);
-
-	void UpdateBGM(); // use on scene update
+	// use on scene update
+	void PlayBGM(const Sound* BGM) const;
+	void PlaySFX(const Sound* SFX) const; 
 
 private:
-	std::vector<SDL_AudioStream*> SFXStreamList;
-	SDL_AudioStream* BGMStream; // for background music
-	SDL_AudioDeviceID mainDevice;
+	MIX_Mixer* audioMixer;
+	MIX_Track* BGMTrack;
+	std::vector<MIX_Track*> SFXTracks;
 
-	enum class SOUND_PIPE {
-		PIPE1 = 0,
-		PIPE2,
-		PIPE3,
-		PIPE4,
-		PIPE5,
-		PIPE6,
-		PIPE7,
-		PIPE8,
-		PIPE9,
-		PIPE10,
-		PIPE11,
-		PIPE12,
-		MAX_NUMBER_PIPES
+	enum class SFX_TRACKS {
+		TRACK1 = 0,
+		TRACK2,
+		TRACK3,
+		TRACK4,
+		TRACK5,
+		TRACK6,
+		TRACK7,
+		TRACK8,
+		TRACK9,
+		TRACK10,
+		TRACK11,
+		TRACK12,
+		MAX_TRACKS
 	};
 
 	SDL_AudioSpec defaultSpec{ // default WAV format spec
-		SDL_AUDIO_S16, // format
+		SDL_AUDIO_F32, // format
 		2, // channel
 		48000 // frequency
 	};
-
-	Sound* BGM;
 };

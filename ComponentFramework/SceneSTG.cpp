@@ -57,9 +57,9 @@ bool SceneSTG::OnCreate() {
 	SDL_ResumeAudioStreamDevice(audioPlayer);
 
 	audioTest = new Sound("audio/Sabbat.wav");
-	audioTest->OnCreate();
+	//audioTest->OnCreate();
 
-	audioTest->Play(audioPlayer);
+	//audioTest->Play(audioPlayer);
 
 	int queued = SDL_GetAudioStreamQueued(audioPlayer);
 
