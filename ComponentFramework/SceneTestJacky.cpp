@@ -40,7 +40,7 @@ bool SceneJA::OnCreate() {
 	soundManager = new SoundManager();
 	soundManager->OnCreate();
 
-	sound2 = new Sound("audio/273711__sfx4animation__whoosh-sfx-40.wav");
+	sound2 = new Sound("audio/LaserShoot.wav");
 	sound2->OnCreate(soundManager->getMixer());
 
 	sound1 = new Sound("audio/Sabbat.wav");

@@ -59,7 +59,14 @@ void SoundManager::PlayBGM(const Sound* BGM) const{
 }
 
 void SoundManager::PlaySFX(const Sound* SFX) const {
-	MIX_PlayAudio(audioMixer, SFX->getAudioData());
+	bool foundTrack = false;
+	for (MIX_Track* SFXtrack : SFXTracks) {
+		if (!MIX_TrackPlaying(SFXtrack)) {
+			MIX_SetTrackAudio(SFXtrack, SFX->getAudioData());
+			MIX_PlayTrack(SFXtrack, 0);
+			break;
+		}
+	}
 }
 
 void SoundManager::adjustMasterVolume(const float value) {
