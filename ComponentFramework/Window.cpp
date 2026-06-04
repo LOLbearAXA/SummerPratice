@@ -1,21 +1,9 @@
 #include "Window.h"
 #include "Debug.h"
 
-
-
-
-
-
 #include "imgui.h"
 #include "imgui_impl_sdl3.h"
 #include "imgui_impl_opengl3.h"
-
-
-
-
-
-
-
 
 Window::Window(): window{nullptr}, context{nullptr},  width{0}, height{0} {}
 
@@ -33,6 +21,8 @@ bool Window::OnCreate(std::string name_, int width_, int height_) {
 		Debug::FatalError("Failed to initialize SDL", __FILE__, __LINE__);
 		return false;
 	}
+
+	MIX_Init();
 
 	this->width = width_;
 	this->height = height_;

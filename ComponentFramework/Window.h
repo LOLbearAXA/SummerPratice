@@ -8,6 +8,8 @@
 #include <iostream>
 #include "Debug.h"
 
+#include <SDL3_mixer/SDL_mixer.h>
+
 class Window {
 private:
 	int width, height;
