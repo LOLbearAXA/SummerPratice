@@ -53,7 +53,6 @@ void SoundManager::OnDestroy() {
 
 // background music specific
 void SoundManager::PlayBGM(const Sound* BGM) const{
-	MIX_StopTrack(BGMTrack, 0);
 	MIX_SetTrackAudio(BGMTrack, BGM->getAudioData());
 	MIX_PlayTrack(BGMTrack, -1);
 }
