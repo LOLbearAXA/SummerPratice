@@ -57,6 +57,23 @@ void SoundManager::PlayBGM(const Sound* BGM) const{
 	MIX_PlayTrack(BGMTrack, -1);
 }
 
+void SoundManager::StopBGM() {
+	if (!BGMTrack) {
+		return;
+	}
+
+	MIX_StopTrack(BGMTrack, 0);
+}
+
+void SoundManager::StopBGM(float second) {
+	if (!BGMTrack) {
+		return;
+	}
+
+	Sint64 frames = MIX_TrackMSToFrames(BGMTrack, (second * 1000));
+	MIX_StopTrack(BGMTrack, frames);
+}
+
 void SoundManager::PlaySFX(const Sound* SFX) const {
 	bool foundTrack = false;
 	for (MIX_Track* SFXtrack : SFXTracks) {

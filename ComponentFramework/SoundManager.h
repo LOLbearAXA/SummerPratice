@@ -28,7 +28,7 @@ public:
 	void PlayBGM(const Sound* BGM) const;
 	void PlaySFX(const Sound* SFX) const; 
 
-	void StopBGM(int second); // fade out version
+	void StopBGM(float second); // fade out version
 	void StopBGM(); // no fade out stop right away
 
 private:

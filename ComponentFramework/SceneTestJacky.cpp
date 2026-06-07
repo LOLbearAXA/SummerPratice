@@ -12,6 +12,9 @@
 #include <QMath.h>
 #include "Camera.h"
 
+// imgui
+#include "imgui.h"
+
 SceneJA::SceneJA() :testOBJ{ nullptr }, shader{ nullptr }, mesh{ nullptr }, soundManager(nullptr),
 drawInWireMode{ false } {
 	Debug::Info("Created SceneJA: ", __FILE__, __LINE__);
@@ -47,7 +50,7 @@ bool SceneJA::OnCreate() {
 	sound1->OnCreate(soundManager->getMixer());
 
 	soundManager->adjustMasterVolume(0.1f);
-	//soundManager->PlayBGM(sound1);
+	soundManager->PlayBGM(sound1);
 
 	return true;
 }
@@ -96,7 +99,7 @@ void SceneJA::HandleEvents(const SDL_Event& sdlEvent) {
 			soundManager->PlaySFX(sound2);
 			break;
 		case SDL_SCANCODE_G:
-			soundManager->adjustMasterVolume(0.2f);
+			soundManager->StopBGM(3.0f);
 			break;
 		default:
 			break;
@@ -131,4 +134,39 @@ void SceneJA::Render() const {
 	testOBJ->Render(shader);
 
 	glUseProgram(0); // TURN OFF THE SHADER
+}
+
+/// imgui
+void SceneJA::DrawGui() {
+	// Optional tiny debug window
+	ImGui::Begin("Scene3p Debug");
+	ImColor textColor(255, 255, 255);
+	ImGui::Text("Yay, ImGui is working!");
+	ImGui::End();
+
+	ImGuiIO& io = ImGui::GetIO();
+	ImDrawList* drawList = ImGui::GetForegroundDrawList();
+
+	// Center of screen
+	ImVec2 center(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
+
+	// Crosshair settings
+	float crosshairSize = 20.0f;
+	float crosshairThickness = 5.0f;
+
+	// Horizontal line
+	drawList->AddLine(
+		ImVec2(center.x - crosshairSize, center.y),
+		ImVec2(center.x + crosshairSize, center.y),
+		IM_COL32(255, 255, 255, 255),
+		crosshairThickness
+	);
+
+	// Vertical line
+	drawList->AddLine(
+		ImVec2(center.x, center.y - crosshairSize),
+		ImVec2(center.x, center.y + crosshairSize),
+		IM_COL32(255, 255, 255, 255),
+		crosshairThickness
+	);
 }

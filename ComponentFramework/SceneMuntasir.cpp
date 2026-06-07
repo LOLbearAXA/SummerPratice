@@ -58,7 +58,7 @@ bool SceneMuntasir::OnCreate() {
 	audioTest = new Sound("audio/Sabbat.wav");
 	//audioTest->OnCreate();
 
-	//udioTest->Play(audioPlayer);
+	//audioTest->Play(audioPlayer);
 
 	int queued = SDL_GetAudioStreamQueued(audioPlayer);
 
