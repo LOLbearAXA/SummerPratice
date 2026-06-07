@@ -19,6 +19,7 @@ private: /// Physics stuff
 	Vec3 vel;
 	Vec3 accel;
 	float mass;
+	float size;
 
 	// rotation stuff
 	Quaternion orientation;
@@ -45,6 +46,8 @@ public:
 	void ApplyForce(Vec3 force);
 	void setAccel(const Vec3 &accel_) { accel = accel_;}
 	void setVel(const Vec3& vel_) { vel = vel_; }
+
+	Matrix4 getModelMatrix();
 
 	void setMesh(const char* filename);
 };

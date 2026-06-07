@@ -74,6 +74,8 @@ void SoundManager::StopBGM(float second) {
 	MIX_StopTrack(BGMTrack, frames);
 }
 
+
+
 void SoundManager::PlaySFX(const Sound* SFX) const {
 	bool foundTrack = false;
 	for (MIX_Track* SFXtrack : SFXTracks) {

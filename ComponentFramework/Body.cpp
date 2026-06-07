@@ -5,7 +5,7 @@
 #include "Texture.h"
 #include "Shader.h"
 
-Body::Body(): pos{}, vel{}, accel{}, mass{1.0f}, radius(1.0f), 
+Body::Body(): pos{}, vel{}, accel{}, mass{1.0f}, radius(1.0f), size{1.0f},
 mesh{nullptr}, texture{nullptr}{
 	// set inertia
 }
@@ -30,6 +30,9 @@ void Body::setMesh(const char* filename) {
 	mesh = new Mesh(filename);
 	mesh->OnCreate();
 	modelMatrix.loadIdentity();
+	modelMatrix = modelMatrix * MMath::translate(pos) * 
+		MMath::toMatrix4(orientation) * 
+		MMath::scale(Vec3(size,size,size));
 }
 
 void Body::OnDestroy() {
@@ -48,3 +51,10 @@ void Body::Render(Shader* shader) const {
 	mesh->Render(GL_TRIANGLES);
 }
 
+Matrix4 Body::getModelMatrix() {
+	modelMatrix.loadIdentity();
+	modelMatrix = modelMatrix * MMath::translate(pos) *
+		MMath::toMatrix4(orientation) *
+		MMath::scale(Vec3(size, size, size));
+	return modelMatrix;
+}
