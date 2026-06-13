@@ -16,7 +16,7 @@
 
 // Constructor
 SceneMuntasir::SceneMuntasir() : playerShip{ nullptr }, shader{ nullptr }, mesh{ nullptr }, audioPlayer{ nullptr },
-drawInWireMode{ false } {
+drawInWireMode{ false }, playerSpeed{ 5.0f } {
 	Debug::Info("Created SceneMuntasir: ", __FILE__, __LINE__);
 }
 
@@ -47,8 +47,11 @@ bool SceneMuntasir::OnCreate() {
 		return false;
 	}
 
+	// Player Position
+	playerPos = Vec3(0.0f, 0.0f, -10.0f);
+
 	// Placement of Alpha Wing
-	playerModelMatrix = MMath::translate(0.0f, 0.0f, -10.0f);
+	playerModelMatrix = MMath::translate(playerPos);
 
 	// Camera looking forward
 	viewMatrix = MMath::lookAt(
@@ -119,8 +122,20 @@ void SceneMuntasir::HandleEvents(const SDL_Event& sdlEvent) {
 	switch (sdlEvent.type) {
 	case SDL_EVENT_KEY_DOWN:
 		switch (sdlEvent.key.scancode) {
-		case SDL_SCANCODE_W:
+		case SDL_SCANCODE_F12:
 			drawInWireMode = !drawInWireMode;
+			break;
+		case SDL_SCANCODE_W:
+			playerPos.y += playerSpeed * 0.1f;
+			break;
+		case SDL_SCANCODE_S:
+			playerPos.y -= playerSpeed * 0.1f;
+			break;
+		case SDL_SCANCODE_A:
+			playerPos.x -= playerSpeed * 0.1f;
+			break;
+		case SDL_SCANCODE_D:
+			playerPos.x += playerSpeed * 0.1f;
 			break;
 		default:
 			break;
@@ -134,6 +149,8 @@ void SceneMuntasir::Update(const float deltaTime) {
 	static float totalTime = 0.0f;
 	totalTime += deltaTime;
 
+	// Update ship position every frame
+	playerModelMatrix = MMath::translate(playerPos);
 }
 
 // Render

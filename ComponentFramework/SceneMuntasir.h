@@ -25,6 +25,9 @@ private:
 	Matrix4 playerModelMatrix;
 	bool drawInWireMode;
 
+	Vec3 playerPos;
+	float playerSpeed;
+
 	Vec3 lightPos;
 
 	SDL_AudioStream* audioPlayer;
