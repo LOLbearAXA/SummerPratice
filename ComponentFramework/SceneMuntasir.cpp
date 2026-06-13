@@ -15,8 +15,8 @@
 #include "imgui.h"
 
 // Constructor
-SceneMuntasir::SceneMuntasir() : playerShip{ nullptr }, shader{ nullptr }, mesh{ nullptr }, audioPlayer{ nullptr },
-drawInWireMode{ false }, playerSpeed{ 5.0f } {
+SceneMuntasir::SceneMuntasir() : playerShip{ nullptr }, shader{ nullptr }, AlphaWingMesh{ nullptr }, audioPlayer{ nullptr },
+drawInWireMode{ false }, playerSpeed{ 5.0f }, bulletSpeed{ 10.0f }, bulletMesh{ nullptr } {
 	Debug::Info("Created SceneMuntasir: ", __FILE__, __LINE__);
 }
 
@@ -29,12 +29,15 @@ SceneMuntasir::~SceneMuntasir() {
 bool SceneMuntasir::OnCreate() {
 	Debug::Info("Loading assets SceneMuntasir: ", __FILE__, __LINE__);
 
-	// Load Blender Model
-	mesh = new Mesh("meshes/Temp_AlphaWingEX.obj");
-	if (mesh->OnCreate() == false) {
+	// Load Alpha wing Blender Model
+	AlphaWingMesh = new Mesh("meshes/Temp_AlphaWingEX.obj");
+	if (AlphaWingMesh->OnCreate() == false) {
 		std::cout << "Mesh faild to load!\n";
 		return false;
 	}
+
+	// Bullet Mesh
+	bulletMesh = new Mesh("meshes/Temp_AlphaWing_Bullet.obj");
 
 	// Create the body with physics 
 	playerShip = new Body();
@@ -82,7 +85,7 @@ bool SceneMuntasir::OnCreate() {
 
 	SDL_ResumeAudioStreamDevice(audioPlayer);
 
-	audioTest = new Sound("audio/music/deadmoy5-gg.wav");
+	audioTest = new Sound("audio/music/deadmou5-gg.wav");
 	audioTest->OnCreate();
 
 	audioTest->Play(audioPlayer);
@@ -104,8 +107,8 @@ void SceneMuntasir::OnDestroy() {
 	delete playerShip;
 
 	// Mesh
-	mesh->OnDestroy();
-	delete mesh;
+	AlphaWingMesh->OnDestroy();
+	delete AlphaWingMesh;
 
 	// Shader
 	shader->OnDestroy();
@@ -173,7 +176,7 @@ void SceneMuntasir::Render() const {
 	glUniformMatrix4fv(shader->GetUniformID("modelMatrix"), 1, GL_FALSE, playerModelMatrix);
 
 	// Draw Alpha WIng
-	mesh->Render();
+	AlphaWingMesh->Render();
 
 	glUseProgram(0); // TURN OFF THE SHADER
 }

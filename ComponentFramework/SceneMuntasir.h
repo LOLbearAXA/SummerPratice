@@ -5,6 +5,7 @@
 #include "Vector.h"
 #include <Matrix.h>
 #include "Sound.h"
+#include <vector>
 
 using namespace MATH;
 
@@ -19,7 +20,7 @@ class SceneMuntasir : public Scene {
 private:
 	Body* playerShip;
 	Shader* shader;
-	Mesh* mesh;
+	Mesh* AlphaWingMesh;
 	Matrix4 projectionMatrix;
 	Matrix4 viewMatrix;
 	Matrix4 playerModelMatrix;
@@ -27,6 +28,10 @@ private:
 
 	Vec3 playerPos;
 	float playerSpeed;
+
+	std::vector<Mesh*> bullets;
+	float bulletSpeed;
+	Mesh* bulletMesh;
 
 	Vec3 lightPos;
 
