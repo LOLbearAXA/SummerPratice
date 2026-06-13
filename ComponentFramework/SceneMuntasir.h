@@ -29,7 +29,7 @@ private:
 	Vec3 playerPos;
 	float playerSpeed;
 
-	std::vector<Mesh*> bullets;
+	std::vector<Vec3> bulletPositions;
 	float bulletSpeed;
 	Mesh* bulletMesh;
 

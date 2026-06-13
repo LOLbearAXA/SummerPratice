@@ -29,7 +29,7 @@ SceneMuntasir::~SceneMuntasir() {
 bool SceneMuntasir::OnCreate() {
 	Debug::Info("Loading assets SceneMuntasir: ", __FILE__, __LINE__);
 
-	// Load Alpha wing Blender Model
+	// Load Alpha wing Model
 	AlphaWingMesh = new Mesh("meshes/Temp_AlphaWingEX.obj");
 	if (AlphaWingMesh->OnCreate() == false) {
 		std::cout << "Mesh faild to load!\n";
@@ -38,6 +38,10 @@ bool SceneMuntasir::OnCreate() {
 
 	// Bullet Mesh
 	bulletMesh = new Mesh("meshes/Temp_AlphaWing_Bullet.obj");
+	if (bulletMesh->OnCreate() == false) {
+		std::cout << "Bullet Mesh not found!\n";
+		return false;
+	}
 
 	// Create the body with physics 
 	playerShip = new Body();
@@ -106,9 +110,14 @@ void SceneMuntasir::OnDestroy() {
 	playerShip->OnDestroy();
 	delete playerShip;
 
-	// Mesh
+	// Alpha Wing Mesh
 	AlphaWingMesh->OnDestroy();
 	delete AlphaWingMesh;
+
+	// Bullet Mesh
+	bulletMesh->OnDestroy();
+	delete bulletMesh;
+	bulletPositions.clear();
 
 	// Shader
 	shader->OnDestroy();
@@ -140,6 +149,9 @@ void SceneMuntasir::HandleEvents(const SDL_Event& sdlEvent) {
 		case SDL_SCANCODE_D:
 			playerPos.x += playerSpeed * 0.1f;
 			break;
+		case SDL_SCANCODE_SPACE:
+			bulletPositions.push_back(playerPos);
+			break;
 		default:
 			break;
 		}
@@ -154,6 +166,18 @@ void SceneMuntasir::Update(const float deltaTime) {
 
 	// Update ship position every frame
 	playerModelMatrix = MMath::translate(playerPos);
+
+	// Move every bullet forward
+	for (int i = 0; i < bulletPositions.size(); i++) {
+		bulletPositions[i].x += bulletSpeed * deltaTime;
+	}
+
+	// Remove bullets that have gone off screen (above y = 15)
+	for (int i = bulletPositions.size() - 1; i > +0; i--) {
+		if (bulletPositions[i].y > 15.0f) {
+			bulletPositions.erase(bulletPositions.begin() + i);
+		}
+	}
 }
 
 // Render
@@ -177,6 +201,14 @@ void SceneMuntasir::Render() const {
 
 	// Draw Alpha WIng
 	AlphaWingMesh->Render();
+
+	// Draw Every Bullet
+	for (int i = 0; i < bulletPositions.size(); i++) {
+		Matrix4 bulletMatrix = MMath::translate(bulletPositions[i]);
+		glUniformMatrix4fv(shader->GetUniformID("modelMatrix"), 1, GL_FALSE, bulletMatrix);
+		bulletMesh->Render();
+	}
+
 
 	glUseProgram(0); // TURN OFF THE SHADER
 }
