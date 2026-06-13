@@ -131,6 +131,7 @@ void SceneMuntasir::OnDestroy() {
 
 // HandleEvents
 void SceneMuntasir::HandleEvents(const SDL_Event& sdlEvent) {
+	// Keyboard
 	switch (sdlEvent.type) {
 	case SDL_EVENT_KEY_DOWN:
 		switch (sdlEvent.key.scancode) {
@@ -154,6 +155,13 @@ void SceneMuntasir::HandleEvents(const SDL_Event& sdlEvent) {
 			break;
 		default:
 			break;
+		}
+		break;
+
+	// Mouse
+	case SDL_EVENT_MOUSE_BUTTON_DOWN:
+		if (sdlEvent.button.button == SDL_BUTTON_LEFT) {
+			bulletPositions.push_back(playerPos);
 		}
 		break;
 	}
