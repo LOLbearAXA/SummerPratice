@@ -14,29 +14,53 @@
 // imgui
 #include "imgui.h"
 
-SceneMuntasir::SceneMuntasir() :sphere{ nullptr }, shader{ nullptr }, mesh{ nullptr }, audioPlayer{ nullptr },
+// Constructor
+SceneMuntasir::SceneMuntasir() : playerShip{ nullptr }, shader{ nullptr }, mesh{ nullptr }, audioPlayer{ nullptr },
 drawInWireMode{ false } {
 	Debug::Info("Created SceneMuntasir: ", __FILE__, __LINE__);
 }
 
+// Destructor
 SceneMuntasir::~SceneMuntasir() {
 	Debug::Info("Deleted SceneMuntasir: ", __FILE__, __LINE__);
 }
 
+// OnCreate
 bool SceneMuntasir::OnCreate() {
 	Debug::Info("Loading assets SceneMuntasir: ", __FILE__, __LINE__);
 
-	sphere = new Body();
-	sphere->OnCreate();
-
-	shader = new Shader("shaders/defaultVert.glsl", "shaders/defaultFrag.glsl");
-	if (shader->OnCreate() == false) {
-		std::cout << "Shader failed ... we have a problem\n";
+	// Load Blender Model
+	mesh = new Mesh("meshes/Temp_AlphaWingEX.obj");
+	if (mesh->OnCreate() == false) {
+		std::cout << "Mesh faild to load!\n";
+		return false;
 	}
 
-	//mesh = new Mesh("meshes/Sphere.obj");
-	//mesh->OnCreate();
+	// Create the body with physics 
+	playerShip = new Body();
+	playerShip->OnCreate();
 
+	// Load shader
+	shader = new Shader("shaders/defaultVert.glsl", "shaders/defaultFrag.glsl");
+	if (shader->OnCreate() == false) {
+		std::cout << "Shader failed!\n";
+		return false;
+	}
+
+	// Placement of Alpha Wing
+	playerModelMatrix = MMath::translate(0.0f, 0.0f, -10.0f);
+
+	// Camera looking forward
+	viewMatrix = MMath::lookAt(
+		Vec3(0.0f, 0.0f, 0.0f),
+		Vec3(0.0f, 0.0f, -1.0f),
+		Vec3(0.0f, 1.0f, 0.0f)
+	);
+
+	// Perspective (this belongs to projectionMatrix, not playerModelMatrix)
+	projectionMatrix = MMath::perspective(45.0f, 16.0f / 9.0f, 0.1f, 100.0f);
+
+	// SDL_Mixer Default
 	SDL_AudioSpec defaultSpec;
 	defaultSpec.freq = 48000;
 	defaultSpec.channels = 2;
@@ -67,24 +91,30 @@ bool SceneMuntasir::OnCreate() {
 	return true;
 }
 
+// OnDestroy
 void SceneMuntasir::OnDestroy() {
+	//Debug
 	Debug::Info("Deleting assets SceneMuntasir: ", __FILE__, __LINE__);
-	sphere->OnDestroy();
-	delete sphere;
 
-	//mesh->OnDestroy();
-	//delete mesh;
+	// Player Ship
+	playerShip->OnDestroy();
+	delete playerShip;
 
+	// Mesh
+	mesh->OnDestroy();
+	delete mesh;
+
+	// Shader
 	shader->OnDestroy();
 	delete shader;
 
-	// destroy audio player
+	// Audio player
 	SDL_DestroyAudioStream(audioPlayer);
-
 	audioTest->OnDestroy();
 	delete audioTest;
 }
 
+// HandleEvents
 void SceneMuntasir::HandleEvents(const SDL_Event& sdlEvent) {
 	switch (sdlEvent.type) {
 	case SDL_EVENT_KEY_DOWN:
@@ -99,17 +129,18 @@ void SceneMuntasir::HandleEvents(const SDL_Event& sdlEvent) {
 	}
 }
 
+// Update
 void SceneMuntasir::Update(const float deltaTime) {
 	static float totalTime = 0.0f;
 	totalTime += deltaTime;
 
 }
 
+// Render
 void SceneMuntasir::Render() const {
+	
 	glEnable(GL_DEPTH_TEST);
-
-	/// Set the background color then clear the screen
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (drawInWireMode) {
@@ -122,15 +153,15 @@ void SceneMuntasir::Render() const {
 	glUseProgram(shader->GetProgram()); // turn on shader
 	glUniformMatrix4fv(shader->GetUniformID("projectionMatrix"), 1, GL_FALSE, projectionMatrix);
 	glUniformMatrix4fv(shader->GetUniformID("viewMatrix"), 1, GL_FALSE, viewMatrix);
+	glUniformMatrix4fv(shader->GetUniformID("modelMatrix"), 1, GL_FALSE, playerModelMatrix);
+
+	// Draw Alpha WIng
+	mesh->Render();
 
 	glUseProgram(0); // TURN OFF THE SHADER
 }
 
-
-
-
-
-/// imgui
+// imgui
 void SceneMuntasir::DrawGui() {
 	// Optional tiny debug window
 	ImGui::Begin("Scene3p Debug");

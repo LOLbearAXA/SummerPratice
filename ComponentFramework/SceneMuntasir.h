@@ -17,12 +17,12 @@ class Texture;
 
 class SceneMuntasir : public Scene {
 private:
-	Body* sphere;
+	Body* playerShip;
 	Shader* shader;
 	Mesh* mesh;
 	Matrix4 projectionMatrix;
 	Matrix4 viewMatrix;
-	Matrix4 earthModelMatrix, moonModelMatrix, marioModelMatrix;
+	Matrix4 playerModelMatrix;
 	bool drawInWireMode;
 
 	Vec3 lightPos;
