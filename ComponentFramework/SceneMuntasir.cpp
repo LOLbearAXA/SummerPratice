@@ -60,9 +60,9 @@ bool SceneMuntasir::OnCreate() {
 	// Perspective (this belongs to projectionMatrix, not playerModelMatrix)
 	projectionMatrix = MMath::perspective(45.0f, 16.0f / 9.0f, 0.1f, 100.0f);
 
-	// SDL_Mixer Default
+	// SDL_Mixer with own my tuning
 	SDL_AudioSpec defaultSpec;
-	defaultSpec.freq = 48000;
+	defaultSpec.freq = 44100;
 	defaultSpec.channels = 2;
 	defaultSpec.format = SDL_AUDIO_S16;
 
@@ -79,7 +79,7 @@ bool SceneMuntasir::OnCreate() {
 
 	SDL_ResumeAudioStreamDevice(audioPlayer);
 
-	audioTest = new Sound("audio/Sabbat.wav");
+	audioTest = new Sound("audio/music/deadmoy5-gg.wav");
 	audioTest->OnCreate();
 
 	audioTest->Play(audioPlayer);
