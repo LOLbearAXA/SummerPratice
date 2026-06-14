@@ -16,7 +16,7 @@
 
 // Constructor
 SceneMuntasir::SceneMuntasir() : playerShip{ nullptr }, shader{ nullptr }, AlphaWingMesh{ nullptr }, audioPlayer{ nullptr },
-drawInWireMode{ false }, playerSpeed{ 5.0f }, bulletSpeed{ 10.0f }, bulletMesh{ nullptr } {
+drawInWireMode{ false }, playerSpeed{ 5.0f }, bulletSpeed{ 10.0f }, bulletMesh{ nullptr }, Bot01Mesh{ nullptr }, Bot01Speed{ 3.0f }, spawnTimer{ 0.0f }, spawnInterval{ 2.0f } {
 	Debug::Info("Created SceneMuntasir: ", __FILE__, __LINE__);
 }
 
@@ -40,6 +40,13 @@ bool SceneMuntasir::OnCreate() {
 	bulletMesh = new Mesh("meshes/Temp_AlphaWing_Bullet.obj");
 	if (bulletMesh->OnCreate() == false) {
 		std::cout << "Bullet Mesh not found!\n";
+		return false;
+	}
+
+	// Enemy Bot01 Mesh
+	Bot01Mesh = new Mesh("meshes/Temp_AlphaWing_Enemy_Bot01.obj");
+	if (Bot01Mesh->OnCreate() == false) {
+		std::cout << "Enemy mesh not in there!\n";
 		return false;
 	}
 
@@ -119,6 +126,11 @@ void SceneMuntasir::OnDestroy() {
 	delete bulletMesh;
 	bulletPositions.clear();
 
+	// Bot01 Mesh
+	Bot01Mesh->OnDestroy();
+	delete Bot01Mesh;
+	Bot01Positions.clear();
+
 	// Shader
 	shader->OnDestroy();
 	delete shader;
@@ -172,8 +184,9 @@ void SceneMuntasir::Update(const float deltaTime) {
 	static float totalTime = 0.0f;
 	totalTime += deltaTime;
 
-	// Update ship position every frame
-	playerModelMatrix = MMath::translate(playerPos);
+	// Player Matrix
+	playerModelMatrix = MMath::translate(playerPos) *
+						MMath::scale(0.3f, 0.3f, 0.3f);
 
 	// Move every bullet forward
 	for (int i = 0; i < bulletPositions.size(); i++) {
@@ -184,6 +197,29 @@ void SceneMuntasir::Update(const float deltaTime) {
 	for (int i = bulletPositions.size() - 1; i > +0; i--) {
 		if (bulletPositions[i].y > 15.0f) {
 			bulletPositions.erase(bulletPositions.begin() + i);
+		}
+	}
+
+	// Spawn timer
+	spawnTimer += deltaTime;
+	if (spawnTimer >= spawnInterval) {
+
+		spawnTimer = 0.0f;
+
+		// Spawn Bot01 on the right side, random Y height
+		float randomY = ((rand() % 10) - 5) * 0.5f;
+		Bot01Positions.push_back(Vec3(15.0f, randomY, -10.0f));
+	}
+
+	// Move Bot01 to the left towards player
+	for (int i = 0; i < Bot01Positions.size(); i++) {
+		Bot01Positions[i].x -= Bot01Speed * deltaTime;
+	}
+
+	// Remove enemies that passed player
+	for (int i = Bot01Positions.size() - 1; i >= 0; i--) {
+		if (Bot01Positions[i].x < -15.0f) {
+			Bot01Positions.erase(Bot01Positions.begin() + i);
 		}
 	}
 }
@@ -217,6 +253,14 @@ void SceneMuntasir::Render() const {
 		bulletMesh->Render();
 	}
 
+	// Draw Bot01
+	for (int i = 0; i < Bot01Positions.size(); i++) {
+		Matrix4 enemyMatrix = MMath::translate(Bot01Positions[i]) *
+							  MMath::rotate(180.0f, Vec3(0.0f, 1.0f, 0.0f)) *
+							  MMath::scale(0.3f, 0.3f, 0.3f);
+		glUniformMatrix4fv(shader->GetUniformID("modelMatrix"), 1, GL_FALSE, enemyMatrix);
+		Bot01Mesh->Render();
+	}
 
 	glUseProgram(0); // TURN OFF THE SHADER
 }

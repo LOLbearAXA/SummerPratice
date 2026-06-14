@@ -33,6 +33,12 @@ private:
 	float bulletSpeed;
 	Mesh* bulletMesh;
 
+	Mesh* Bot01Mesh;
+	std::vector<Vec3> Bot01Positions;
+	float Bot01Speed;
+	float spawnTimer;
+	float spawnInterval;
+
 	Vec3 lightPos;
 
 	SDL_AudioStream* audioPlayer;
