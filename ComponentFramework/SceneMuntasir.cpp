@@ -195,15 +195,19 @@ void SceneMuntasir::HandleEvents(const SDL_Event& sdlEvent) {
 			break;
 		case SDL_SCANCODE_W:
 			playerPos.y += playerSpeed * 0.1f;
+			if (playerPos.y > 4.5f) playerPos.y = 4.5f;
 			break;
 		case SDL_SCANCODE_S:
 			playerPos.y -= playerSpeed * 0.1f;
+			if (playerPos.y < -4.5f) playerPos.y = -4.5f;
 			break;
 		case SDL_SCANCODE_A:
 			playerPos.x -= playerSpeed * 0.1f;
+			if (playerPos.x < -8.0f) playerPos.x = -8.0f;
 			break;
 		case SDL_SCANCODE_D:
 			playerPos.x += playerSpeed * 0.1f;
+			if (playerPos.x > 8.0f) playerPos.x = 8.0f;
 			break;
 		case SDL_SCANCODE_SPACE:
 			bulletPositions.push_back(playerPos);
@@ -244,9 +248,9 @@ void SceneMuntasir::Update(const float deltaTime) {
 		bulletPositions[i].x += bulletSpeed * deltaTime;
 	}
 
-	// Remove bullets that have gone off screen (above y = 15)
+	// Remove bullets that have gone off screens
 	for (int i = bulletPositions.size() - 1; i > +0; i--) {
-		if (bulletPositions[i].y > 15.0f) {
+		if (bulletPositions[i].x > 15.0f) {
 			bulletPositions.erase(bulletPositions.begin() + i);
 		}
 	}
@@ -441,9 +445,6 @@ void SceneMuntasir::DrawGui() {
 	// Score
 	ImGui::Text("SCORE: %d", score);
 
-
-
-	ImGui::Text("SCORE: %d", score);
 	ImGui::Text("LIVES: ");
 	ImGui::SameLine();
 	for (int i = 0; i < lives; i++) {
