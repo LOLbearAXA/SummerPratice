@@ -107,6 +107,10 @@ void SceneManager::Run() {
 void SceneManager::HandleEvents() {
 	SDL_Event sdlEvent;
 	while (SDL_PollEvent(&sdlEvent)) { /// Loop over all events in the SDL queue
+
+		// ImGui gets events FIRST - this is what was missing!
+		ImGui_ImplSDL3_ProcessEvent(&sdlEvent);
+
 		if (sdlEvent.type == SDL_EventType::SDL_EVENT_QUIT) {
 			isRunning = false;
 			return;

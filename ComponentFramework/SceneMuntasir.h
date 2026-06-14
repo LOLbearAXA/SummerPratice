@@ -41,6 +41,13 @@ private:
 
 	Vec3 lightPos;
 
+	SDL_AudioStream* sfxPlayer;  // separate stream just for sound effects
+	Sound* sfxLaser;
+
+	float musicVolume;
+	float sfxVolume;
+	bool musicPaused;
+
 	SDL_AudioStream* audioPlayer;
 	Sound* audioTest;
 
