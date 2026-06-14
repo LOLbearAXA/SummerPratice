@@ -17,7 +17,9 @@
 // Constructor
 SceneMuntasir::SceneMuntasir() : playerShip{ nullptr }, shader{ nullptr }, AlphaWingMesh{ nullptr }, audioPlayer{ nullptr },
 drawInWireMode{ false }, playerSpeed{ 5.0f }, bulletSpeed{ 10.0f }, bulletMesh{ nullptr }, Bot01Mesh{ nullptr }, 
-Bot01Speed{ 3.0f }, spawnTimer{ 0.0f }, spawnInterval{ 2.0f }, musicVolume{ 0.5f }, sfxVolume{ 1.0f }, musicPaused{ false }, score{ 0 } {
+Bot01Speed{ 3.0f }, spawnTimer{ 0.0f }, spawnInterval{ 2.0f }, musicVolume{ 0.5f }, sfxVolume{ 1.0f }, musicPaused{ false },
+score{ 0 }, lives{ 3 }, health{ 100 }, maxHealth{ 100 }, asteroidMesh{ nullptr }, asteroidSpeed{ 2.0f }, asteroidSpawnTimer{ 0.0f }, 
+asteroidSpawnInterval{ 1.5f }, gameOver{ false } {
 	Debug::Info("Created SceneMuntasir: ", __FILE__, __LINE__);
 }
 
@@ -41,6 +43,13 @@ bool SceneMuntasir::OnCreate() {
 	bulletMesh = new Mesh("meshes/Temp_AlphaWing_Bullet.obj");
 	if (bulletMesh->OnCreate() == false) {
 		std::cout << "Bullet Mesh not found!\n";
+		return false;
+	}
+
+	// Asteroid Mesh
+	asteroidMesh = new Mesh("meshes/Temp_Asteroid.obj");
+	if (asteroidMesh->OnCreate() == false) {
+		std::cout << "Asteroid mesh not found!\n";
 		return false;
 	}
 
@@ -146,6 +155,11 @@ void SceneMuntasir::OnDestroy() {
 	delete bulletMesh;
 	bulletPositions.clear();
 
+	// Asteroid Mesh
+	asteroidMesh->OnDestroy();
+	delete asteroidMesh;
+	asteroidPositions.clear();
+
 	// Bot01 Mesh
 	Bot01Mesh->OnDestroy();
 	delete Bot01Mesh;
@@ -218,6 +232,9 @@ void SceneMuntasir::Update(const float deltaTime) {
 	static float totalTime = 0.0f;
 	totalTime += deltaTime;
 
+	// If game over, stop updating everything
+	if (gameOver) return;
+
 	// Player Matrix
 	playerModelMatrix = MMath::translate(playerPos) *
 						MMath::scale(0.3f, 0.3f, 0.3f);
@@ -234,7 +251,29 @@ void SceneMuntasir::Update(const float deltaTime) {
 		}
 	}
 
-	// Spawn timer
+	// Asteroid spawn timer - wave 1
+	asteroidSpawnTimer += deltaTime;
+	if (asteroidSpawnTimer >= asteroidSpawnInterval) {
+		asteroidSpawnTimer = 0.0f;
+		float randomY = ((rand() % 10) - 5) * 0.5f;
+		asteroidPositions.push_back(Vec3(15.0f, randomY, -10.0f));
+	}
+
+	// Move asteroids left
+	for (int i = 0; i < asteroidPositions.size(); i++) {
+		asteroidPositions[i].x -= asteroidSpeed * deltaTime;
+	}
+
+	// Remove asteroid off the screen
+	for (int i = asteroidPositions.size() - 1; i >= 0; i--) {
+		if (asteroidPositions[i].x < -15.0f) {
+			asteroidPositions.erase(asteroidPositions.begin() + i);
+		}
+	}
+
+
+
+	// Bot01 Spawn timer
 	spawnTimer += deltaTime;
 	if (spawnTimer >= spawnInterval) {
 
@@ -257,22 +296,86 @@ void SceneMuntasir::Update(const float deltaTime) {
 		}
 	}
 
+	//// Collision - bullet hits enemy
+	//for (int b = bulletPositions.size() - 1; b >= 0; b--) {
+	//	for (int e = Bot01Positions.size() - 1; e >= 0; e--) {
+
+	//		// Get Distance between bullet and the enemy
+	//		float dx = bulletPositions[b].x - Bot01Positions[e].x;
+	//		float dy = bulletPositions[b].y - Bot01Positions[e].y;
+	//		float distance = sqrt(dx * dx + dy * dy);
+
+	//		// If close enough - hit!
+	//		if (distance < 1.0f) {
+	//			bulletPositions.erase(bulletPositions.begin() + b);
+	//			Bot01Positions.erase(Bot01Positions.begin() + e);
+	//			score += 100;
+	//			sfxExplosion->Play(sfxPlayer);
+	//			break;
+	//		}
+	//	}
+	//}
+
 	// Collision - bullet hits enemy
 	for (int b = bulletPositions.size() - 1; b >= 0; b--) {
 		for (int e = Bot01Positions.size() - 1; e >= 0; e--) {
-
-			// Get Distance between bullet and the enemy
 			float dx = bulletPositions[b].x - Bot01Positions[e].x;
 			float dy = bulletPositions[b].y - Bot01Positions[e].y;
 			float distance = sqrt(dx * dx + dy * dy);
-
-			// If close enough - hit!
 			if (distance < 1.0f) {
 				bulletPositions.erase(bulletPositions.begin() + b);
 				Bot01Positions.erase(Bot01Positions.begin() + e);
 				score += 100;
 				sfxExplosion->Play(sfxPlayer);
 				break;
+			}
+		}
+	}
+
+	// Collision - bullet hits asteroid (same idea, less points)
+	for (int b = bulletPositions.size() - 1; b >= 0; b--) {
+		for (int a = asteroidPositions.size() - 1; a >= 0; a--) {
+			float dx = bulletPositions[b].x - asteroidPositions[a].x;
+			float dy = bulletPositions[b].y - asteroidPositions[a].y;
+			float distance = sqrt(dx * dx + dy * dy);
+			if (distance < 1.0f) {
+				bulletPositions.erase(bulletPositions.begin() + b);
+				asteroidPositions.erase(asteroidPositions.begin() + a);
+				score += 50;                    // asteroids worth less
+				sfxExplosion->Play(sfxPlayer);
+				break;
+			}
+		}
+	}
+
+	// Collision - asteroid hits player
+	for (int a = asteroidPositions.size() - 1; a >= 0; a--) {
+		float dx = playerPos.x - asteroidPositions[a].x;
+		float dy = playerPos.y - asteroidPositions[a].y;
+		float distance = sqrt(dx * dx + dy * dy);
+		if (distance < 1.0f) {
+			asteroidPositions.erase(asteroidPositions.begin() + a);
+			health -= 25.0f;
+			sfxExplosion->Play(sfxPlayer);
+			if (health <= 0.0f) {
+				lives--;
+				health = maxHealth;
+			}
+		}
+	}
+
+	// Collision - Bot01 hits player
+	for (int e = Bot01Positions.size() - 1; e >= 0; e--) {
+		float dx = playerPos.x - Bot01Positions[e].x;
+		float dy = playerPos.y - Bot01Positions[e].y;
+		float distance = sqrt(dx * dx + dy * dy);
+		if (distance < 1.0f) {
+			Bot01Positions.erase(Bot01Positions.begin() + e);
+			health -= 40.0f;                // enemies hurt more than asteroids
+			sfxExplosion->Play(sfxPlayer);
+			if (health <= 0.0f) {
+				lives--;
+				health = maxHealth;
 			}
 		}
 	}
@@ -307,6 +410,14 @@ void SceneMuntasir::Render() const {
 		bulletMesh->Render();
 	}
 
+	// Draw Asteroids
+	for (int i = 0; i < asteroidPositions.size(); i++) {
+		Matrix4 asteroidMatrix = MMath::translate(asteroidPositions[i]) *
+			MMath::scale(0.4f, 0.4f, 0.4f);
+		glUniformMatrix4fv(shader->GetUniformID("modelMatrix"), 1, GL_FALSE, asteroidMatrix);
+		asteroidMesh->Render();
+	}
+
 	// Draw Bot01
 	for (int i = 0; i < Bot01Positions.size(); i++) {
 		Matrix4 enemyMatrix = MMath::translate(Bot01Positions[i]) *
@@ -329,6 +440,33 @@ void SceneMuntasir::DrawGui() {
 
 	// Score
 	ImGui::Text("SCORE: %d", score);
+
+
+
+	ImGui::Text("SCORE: %d", score);
+	ImGui::Text("LIVES: ");
+	ImGui::SameLine();
+	for (int i = 0; i < lives; i++) {
+		ImGui::Text("[*]");
+		ImGui::SameLine();
+	}
+	ImGui::NewLine();
+
+	// Health bar changes color green to yellow to red
+	float healthPercent = health / maxHealth;
+	if (healthPercent > 0.6f) {
+		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(0.0f, 1.0f, 0.0f, 1.0f));
+	}
+	else if (healthPercent > 0.3f) {
+		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(1.0f, 1.0f, 0.0f, 1.0f));
+	}
+	else {
+		ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+	}
+	ImGui::ProgressBar(healthPercent, ImVec2(260, 20), "");
+	ImGui::PopStyleColor();
+
+
 
 	// Music volume slider
 	ImGui::Text("Music Volume");

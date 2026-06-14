@@ -39,6 +39,18 @@ private:
 	float spawnTimer;
 	float spawnInterval;
 
+	int lives;
+	float health;
+	float maxHealth;
+
+	Mesh* asteroidMesh;
+	std::vector<Vec3> asteroidPositions;
+	float asteroidSpeed;
+	float asteroidSpawnTimer;
+	float asteroidSpawnInterval;
+
+	bool gameOver;
+
 	int score;
 	Sound* sfxExplosion;
 
