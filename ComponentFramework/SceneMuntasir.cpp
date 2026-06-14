@@ -222,6 +222,24 @@ void SceneMuntasir::Update(const float deltaTime) {
 			Bot01Positions.erase(Bot01Positions.begin() + i);
 		}
 	}
+
+	// Collision - bullet hits enemy
+	for (int b = bulletPositions.size() - 1; b >= 0; b--) {
+		for (int e = Bot01Positions.size() - 1; e >= 0; e--) {
+
+			// Get Distance between bullet and the enemy
+			float dx = bulletPositions[b].x - Bot01Positions[e].x;
+			float dy = bulletPositions[b].y - Bot01Positions[e].y;
+			float distance = sqrt(dx * dx + dy * dy);
+
+			// If close enough - hit!
+			if (distance < 1.0f) {
+				bulletPositions.erase(bulletPositions.begin() + b);
+				Bot01Positions.erase(Bot01Positions.begin() + e);
+				break;
+			}
+		}
+	}
 }
 
 // Render
