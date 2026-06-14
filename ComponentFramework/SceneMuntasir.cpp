@@ -322,7 +322,7 @@ void SceneMuntasir::Render() const {
 // imgui
 void SceneMuntasir::DrawGui() {
 
-	// --- Audio Control Panel ---
+	// Audio Control Panel
 	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_Always);
 	ImGui::SetNextWindowSize(ImVec2(300, 160), ImGuiCond_Always);
 	ImGui::Begin("Audio Settings", nullptr, ImGuiWindowFlags_NoResize);
