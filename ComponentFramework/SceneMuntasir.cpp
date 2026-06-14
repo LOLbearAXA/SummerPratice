@@ -17,7 +17,7 @@
 // Constructor
 SceneMuntasir::SceneMuntasir() : playerShip{ nullptr }, shader{ nullptr }, AlphaWingMesh{ nullptr }, audioPlayer{ nullptr },
 drawInWireMode{ false }, playerSpeed{ 5.0f }, bulletSpeed{ 10.0f }, bulletMesh{ nullptr }, Bot01Mesh{ nullptr }, 
-Bot01Speed{ 3.0f }, spawnTimer{ 0.0f }, spawnInterval{ 2.0f }, musicVolume{ 0.5f }, sfxVolume{ 1.0f }, musicPaused{ false } {
+Bot01Speed{ 3.0f }, spawnTimer{ 0.0f }, spawnInterval{ 2.0f }, musicVolume{ 0.5f }, sfxVolume{ 1.0f }, musicPaused{ false }, score{ 0 } {
 	Debug::Info("Created SceneMuntasir: ", __FILE__, __LINE__);
 }
 
@@ -78,42 +78,7 @@ bool SceneMuntasir::OnCreate() {
 	// Perspective (this belongs to projectionMatrix, not playerModelMatrix)
 	projectionMatrix = MMath::perspective(45.0f, 16.0f / 9.0f, 0.1f, 100.0f);
 
-
-	//// SFX
-	//sfxLaser = new Sound("audio/sfx/LaserShoot.wav");
-	//sfxLaser->OnCreate();
-
-	//// SDL_Mixer with own my tuning
-	//SDL_AudioSpec defaultSpec;
-	//defaultSpec.freq = 44100;
-	//defaultSpec.channels = 2;
-	//defaultSpec.format = SDL_AUDIO_S16;
-
-	//audioPlayer = SDL_OpenAudioDeviceStream(
-	//	SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,
-	//	&defaultSpec,
-	//	nullptr,
-	//	nullptr
-	//);
-
-	//if (!audioPlayer) {
-	//	std::cout << "Failed to create audio player\n";
-	//}
-
-	//SDL_ResumeAudioStreamDevice(audioPlayer);
-
-	//audioTest = new Sound("audio/music/deadmou5-gg.wav");
-	//audioTest->OnCreate();
-
-	//audioTest->Play(audioPlayer);
-
-	//int queued = SDL_GetAudioStreamQueued(audioPlayer);
-
-	//SDL_Log("Queued bytes: %d", queued);
-
-	//return true;
-
-		// --- Audio Setup ---
+	// Audio Setup
 	SDL_AudioSpec defaultSpec;
 	defaultSpec.freq = 44100;
 	defaultSpec.channels = 2;
@@ -131,7 +96,7 @@ bool SceneMuntasir::OnCreate() {
 	}
 	SDL_ResumeAudioStreamDevice(audioPlayer);
 
-	// SFX stream (separate!)
+	// SFX stream
 	sfxPlayer = SDL_OpenAudioDeviceStream(
 		SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,
 		&defaultSpec,
@@ -151,6 +116,10 @@ bool SceneMuntasir::OnCreate() {
 	// Load SFX - plays on sfxPlayer
 	sfxLaser = new Sound("audio/sfx/LaserShoot.wav");
 	sfxLaser->OnCreate();
+
+	// SFX Explosion
+	sfxExplosion = new Sound("audio/sfx/Explosion01.wav");
+	sfxExplosion->OnCreate();
 
 	// Log both streams
 	SDL_Log("Music queued bytes: %d", SDL_GetAudioStreamQueued(audioPlayer));
@@ -186,9 +155,13 @@ void SceneMuntasir::OnDestroy() {
 	shader->OnDestroy();
 	delete shader;
 
-	// SFX
+	// SFX Laser
 	sfxLaser->OnDestroy();
 	delete sfxLaser;
+
+	// SFX Explosion
+	sfxExplosion->OnDestroy();
+	delete sfxExplosion;
 
 	// Audio player
 	SDL_DestroyAudioStream(audioPlayer);
@@ -228,13 +201,6 @@ void SceneMuntasir::HandleEvents(const SDL_Event& sdlEvent) {
 		break;
 
 	// Mouse
-	//case SDL_EVENT_MOUSE_BUTTON_DOWN:
-	//	if (sdlEvent.button.button == SDL_BUTTON_LEFT) {
-	//		bulletPositions.push_back(playerPos);
-	//		sfxLaser->Play(audioPlayer);
-	//	}
-	//	break;
-
 	case SDL_EVENT_MOUSE_BUTTON_DOWN:
 		if (sdlEvent.button.button == SDL_BUTTON_LEFT) {
 			// Only shoot if ImGui is NOT using the mouse
@@ -304,6 +270,8 @@ void SceneMuntasir::Update(const float deltaTime) {
 			if (distance < 1.0f) {
 				bulletPositions.erase(bulletPositions.begin() + b);
 				Bot01Positions.erase(Bot01Positions.begin() + e);
+				score += 100;
+				sfxExplosion->Play(sfxPlayer);
 				break;
 			}
 		}
@@ -352,47 +320,15 @@ void SceneMuntasir::Render() const {
 }
 
 // imgui
-
-//void SceneMuntasir::DrawGui() {
-//	// Optional tiny debug window
-//	ImGui::Begin("Scene3p Debug");
-//	ImColor textColor(255, 255, 255);
-//	ImGui::Text("Yay, ImGui is working!");
-//	ImGui::End();
-//
-//	ImGuiIO& io = ImGui::GetIO();
-//	ImDrawList* drawList = ImGui::GetForegroundDrawList();
-//
-//	// Center of screen
-//	ImVec2 center(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
-//
-//	// Crosshair settings
-//	float crosshairSize = 20.0f;
-//	float crosshairThickness = 5.0f;
-//
-//	// Horizontal line
-//	drawList->AddLine(
-//		ImVec2(center.x - crosshairSize, center.y),
-//		ImVec2(center.x + crosshairSize, center.y),
-//		IM_COL32(255, 255, 255, 255),
-//		crosshairThickness
-//	);
-//
-//	// Vertical line
-//	drawList->AddLine(
-//		ImVec2(center.x, center.y - crosshairSize),
-//		ImVec2(center.x, center.y + crosshairSize),
-//		IM_COL32(255, 255, 255, 255),
-//		crosshairThickness
-//	);
-//}
-
 void SceneMuntasir::DrawGui() {
 
 	// --- Audio Control Panel ---
 	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_Always);
 	ImGui::SetNextWindowSize(ImVec2(300, 160), ImGuiCond_Always);
 	ImGui::Begin("Audio Settings", nullptr, ImGuiWindowFlags_NoResize);
+
+	// Score
+	ImGui::Text("SCORE: %d", score);
 
 	// Music volume slider
 	ImGui::Text("Music Volume");

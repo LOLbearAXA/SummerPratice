@@ -39,6 +39,9 @@ private:
 	float spawnTimer;
 	float spawnInterval;
 
+	int score;
+	Sound* sfxExplosion;
+
 	Vec3 lightPos;
 
 	SDL_AudioStream* sfxPlayer;  // separate stream just for sound effects
